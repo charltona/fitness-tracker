@@ -1,4 +1,4 @@
-# Fitness Tracker
+# RepLog
 
 ![Demo Screenshot](./demo.jpg)
 

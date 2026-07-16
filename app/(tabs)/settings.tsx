@@ -31,7 +31,7 @@ export default function SettingsScreen() {
       };
 
       const backupStr = JSON.stringify(backupObj, null, 2);
-      const file = new File(Paths.cache, 'fitness_tracker_backup.json');
+      const file = new File(Paths.cache, 'replog_backup.json');
 
       await file.write(backupStr);
 
