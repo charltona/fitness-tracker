@@ -1,4 +1,4 @@
-# RepLog
+# Legend
 
 ![Demo Screenshot](./demo.jpg)
 

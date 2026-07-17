@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "RepLog",
-    "slug": "replog",
-    "version": "1.0.0",
+    "name": "Legend",
+    "slug": "legend",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./icon.png",
-    "scheme": "replog",
+    "scheme": "legend",
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true
@@ -16,7 +16,7 @@
         "foregroundImage": "./icon.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.replog"
+      "package": "com.anonymous.legend"
     },
     "web": {
       "bundler": "metro",

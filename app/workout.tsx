@@ -161,6 +161,7 @@ export default function WorkoutScreen() {
 
   const [workout, setWorkout] = useState<any>(null);
   const [activeExercises, setActiveExercises] = useState<any[]>([]);
+  const [collapsedExercises, setCollapsedExercises] = useState<Set<string>>(new Set());
   const [exerciseOptions, setExerciseOptions] = useState<any[]>([]);
   const [showPicker, setShowPicker] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -569,11 +570,31 @@ export default function WorkoutScreen() {
 
             {activeExercises.map((we) => {
               const isAllComplete = we.sets.length > 0 && we.sets.every((s: any) => s.completed);
+              const isCollapsed = collapsedExercises.has(we.weId);
+              const toggleCollapsed = () => {
+                setCollapsedExercises((prev) => {
+                  const next = new Set(prev);
+                  if (next.has(we.weId)) {
+                    next.delete(we.weId);
+                  } else {
+                    next.add(we.weId);
+                  }
+                  return next;
+                });
+              };
               return (
                 <Card key={we.weId} style={styles.exerciseCard}>
                   <Card.Title
                     title={we.exName}
-                    subtitle={formatExerciseType(we.exType)}
+                    subtitle={isCollapsed ? `${we.sets.length} set${we.sets.length !== 1 ? 's' : ''}` : formatExerciseType(we.exType)}
+                    left={(props) => (
+                      <IconButton
+                        {...props}
+                        icon={isCollapsed ? 'chevron-right' : 'chevron-down'}
+                        onPress={toggleCollapsed}
+                        style={{ margin: 0 }}
+                      />
+                    )}
                     right={(props) => (
                       <View style={styles.cardActions}>
                         <IconButton
@@ -603,23 +624,25 @@ export default function WorkoutScreen() {
                       </View>
                     )}
                   />
-                  <Card.Content>
-                    {we.sets.map((set: any, index: number) => (
-                      <SetRow
-                        key={set.id}
-                        set={set}
-                        index={index}
-                        exType={we.exType}
-                        theme={theme}
-                        onUpdate={handleUpdateSet}
-                        onToggleComplete={toggleSetComplete}
-                        onDelete={handleDeleteSet}
-                      />
-                    ))}
-                    <Button mode="text" icon="plus" onPress={() => handleAddSet(we)}>
-                      Add Set
-                    </Button>
-                  </Card.Content>
+                  {!isCollapsed && (
+                    <Card.Content>
+                      {we.sets.map((set: any, index: number) => (
+                        <SetRow
+                          key={set.id}
+                          set={set}
+                          index={index}
+                          exType={we.exType}
+                          theme={theme}
+                          onUpdate={handleUpdateSet}
+                          onToggleComplete={toggleSetComplete}
+                          onDelete={handleDeleteSet}
+                        />
+                      ))}
+                      <Button mode="text" icon="plus" onPress={() => handleAddSet(we)}>
+                        Add Set
+                      </Button>
+                    </Card.Content>
+                  )}
                 </Card>
               );
             })}
@@ -646,7 +669,7 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   timerText: { fontWeight: 'bold' },
   scroll: { flex: 1, padding: 16 },
-  addExerciseBtn: { marginVertical: 20 },
+  addExerciseBtn: { marginTop: 20, marginBottom: 100 },
   exerciseCard: { marginBottom: 16 },
   setRow: {
     flexDirection: 'row',
